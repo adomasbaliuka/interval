@@ -76,6 +76,12 @@ instance : Zero Floating where
 instance : One Floating where
   one := ⟨2^62, 2^63 - 62, by decide, by decide, by decide⟩
 
+-- /-- Smallest `Float` -/
+-- @[irreducible] def minval : Floating := ⟨.min + 1, .max ,by decide, by decide, by decide⟩
+
+/-- Largest `Float` -/
+-- @[irreducible] def maxval : Floating := ⟨.max, .max ,by decide, by decide, by decide⟩
+
 -- Definition lemmas
 @[simp] lemma n_zero : (0 : Floating).n = 0 := rfl
 @[simp] lemma s_zero : (0 : Floating).s = 0 := rfl

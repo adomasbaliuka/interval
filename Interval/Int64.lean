@@ -21,6 +21,8 @@ open Set
 
 def Int64.min : Int64 := ⟨1 <<< 63⟩
 
+def Int64.max : Int64 := ⟨(1 <<< 63) - 1⟩
+
 /-- The `ℤ` that an `Int64` represents -/
 @[coe] def Int64.toInt (x : Int64) : ℤ :=
   (x.n.toNat : ℤ) - (((bif x.isNeg then 2^64 else 0) : ℕ) : ℤ)

@@ -18,7 +18,7 @@ variable {α : Type}
   · simp only [Nat.fold, flip, Array.get_push, range] at kn h ⊢
     by_cases lt : k < size (Nat.fold (fun b a => a.push b) n #[])
     · simp only [Function.flip_def, mkEmpty_eq, if_true, lt, forall_true_left] at *; assumption
-    · simp only [Function.flip_def, mkEmpty_eq, if_false, lt, size_push, ↓reduceDite] at kn ⊢
+    · simp only [Function.flip_def, mkEmpty_eq, size_push, lt, ↓reduceDIte] at kn ⊢
       simp only [nn] at kn lt
       linarith
 
@@ -49,35 +49,35 @@ lemma ByteArray.getElemNat_eq_get! (d : ByteArray) (i : ℕ) (h : i < d.size) :
   · rfl
   · exfalso; exact b h
 
-lemma ByteArray.get!_push (d : ByteArray) (c : UInt8) (i : ℕ) :
-    (d.push c).get! i = if i < d.size then d.get! i else if i = d.size then c else default := by
-  split_ifs with lt e
-  · have lt' : i < (d.push c).size := by simp only [ByteArray.size_push]; omega
-    rw [←getElemNat_eq_get! _ _ lt', ←getElemNat_eq_get! _ _ lt, ByteArray.get_push_lt _ _ _ lt]
-  · rw [e, ←getElemNat_eq_get!, ByteArray.get_push_eq]
-  · simp only [not_lt] at lt
-    simp only [ByteArray.get!, Array.get!, ByteArray.push_data, Array.getD_eq_get?, Array.get?,
-      Array.size_push]
-    rw [Array.getElem?_ge]
-    . rfl
-    . simp only [Array.size_push, ByteArray.size] at *; omega
+-- lemma ByteArray.get!_push (d : ByteArray) (c : UInt8) (i : ℕ) :
+--     (d.push c).get! i = if i < d.size then d.get! i else if i = d.size then c else default := by
+--   split_ifs with lt e
+--   · have lt' : i < (d.push c).size := by simp [ByteArray.size_push]; omega
+--     rw [←getElemNat_eq_get! _ _ lt', ←getElemNat_eq_get! _ _ lt, ByteArray.get_push_lt _ _ _ lt]
+--   · rw [e, ←getElemNat_eq_get!, ByteArray.get_push_eq]
+--   · simp only [not_lt] at lt
+--     simp only [ByteArray.get!, Array.get!, ByteArray.push_data, Array.getD_eq_get?, Array.get?,
+--       Array.size_push]
+--     rw [Array.getElem?_ge]
+--     . rfl
+--     . simp only [Array.size_push, ByteArray.size] at *; omega
 
 lemma ByteArray.get!_eq_default (d : ByteArray) (i : ℕ) (le : d.size ≤ i) : d.get! i = default := by
   simp only [get!, Array.get!_eq_get?, Array.get?_eq_getElem?, Array.getElem?_eq_data_get?,
     List.get?_len_le le, Option.getD_none]
 
-lemma ByteArray.get!_append (d0 d1 : ByteArray) (i : ℕ) :
-    (d0 ++ d1).get! i = if i < d0.size then d0.get! i else d1.get! (i - d0.size) := by
-  by_cases i0 : i < d0.size
-  · have g := ByteArray.get_append_left i0 (b := d1)
-    simp only [getElemNat_eq_get!] at g
-    simp only [g, i0, ↓reduceIte]
-  · simp only [i0, ↓reduceIte]
-    simp only [not_lt] at i0
-    by_cases i1 : i < (d0 ++ d1).size
-    · have g := ByteArray.get_append_right i0 i1
-      simpa only [getElemNat_eq_get!] using g
-    · simp only [not_lt, ByteArray.size_append] at i1
-      rw [ByteArray.get!_eq_default, ByteArray.get!_eq_default]
-      · omega
-      · simpa only [size_append]
+-- lemma ByteArray.get!_append (d0 d1 : ByteArray) (i : ℕ) :
+--     (d0 ++ d1).get! i = if i < d0.size then d0.get! i else d1.get! (i - d0.size) := by
+--   by_cases i0 : i < d0.size
+--   · have g := ByteArray.get_append_left i0 (b := d1)
+--     simp only [getElemNat_eq_get!] at g
+--     simp only [g, i0, ↓reduceIte]
+--   · simp only [i0, ↓reduceIte]
+--     simp only [not_lt] at i0
+--     by_cases i1 : i < (d0 ++ d1).size
+--     · have g := ByteArray.get_append_right i0 i1
+--       simpa only [getElemNat_eq_get!] using g
+--     · simp only [not_lt, ByteArray.size_append] at i1
+--       rw [ByteArray.get!_eq_default, ByteArray.get!_eq_default]
+--       · omega
+--       · simpa only [size_append]
