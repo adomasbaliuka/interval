@@ -474,6 +474,19 @@ These are easy now that we have `exp` and `log`.
 @[irreducible] def Interval.pow (x : Interval) (y : Interval) : Interval :=
   (x.log * y).exp
 
+/-- Natural powers
+* allows negative inputs
+* more precise for small powers
+-/
+def Interval.pown (x : Interval) (n : ℕ) : Interval := match n with
+  | 0 => 1
+  | n + 1 => x * x.pown n
+
+/-- Enable `_ ^ _` notation.
+-- Nevertheless, use the "normal" `pow` that takes `Interval` exponenets -/
+instance istHPowIntervalNat : HPow Interval ℕ Interval where
+  hPow x n := x.pow (.ofNat n)
+
 /-- `Interval.pow` is conservative -/
 @[approx] lemma Interval.mem_approx_pow {x : Interval} {y : Interval} {x' y' : ℝ}
     (xm : x' ∈ approx x) (ym : y' ∈ approx y) : x' ^ y' ∈ approx (x.pow y) := by
@@ -488,6 +501,14 @@ These are easy now that we have `exp` and `log`.
 @[approx] lemma Interval.mem_approx_pow_nat {x : Interval} {n : ℕ} {x' : ℝ}
     (xm : x' ∈ approx x) : x' ^ n ∈ approx (x.pow (.ofNat n)) := by
   simp only [← Real.rpow_natCast]
+  approx
+
+/-- `Interval.pow` is conservative for `ℕ` powers -/
+@[approx] lemma Interval.mem_approx_pow_nat' {x : Interval} {n : ℕ} {x' : ℝ}
+    (xm : x' ∈ approx x) : x' ^ n ∈ approx (x ^ n) := by
+  simp only [← Real.rpow_natCast]
+  have : x ^ n = x.pow (.ofNat n) := by unfold HPow.hPow; rfl
+  rw [this]
   approx
 
 /-!
