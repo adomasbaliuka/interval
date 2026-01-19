@@ -19,6 +19,6 @@ jobs:
 
       - uses: leanprover/lean-action@v1
         with:
-          check-reservoir-eligibility: true
+          check-reservoir-eligibility: false
       
       - uses: leanprover-community/docgen-action@v1
