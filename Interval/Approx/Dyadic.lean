@@ -110,8 +110,6 @@ instance : CommRing Dyadic where
   npow_zero x := Dyadic.pow_zero _
   npow_succ x n := Dyadic.pow_succ _ _
 
-@[simp] lemma Dyadic.monoidPow_eq_instPowNat : Monoid.toNatPow = instPowNat := rfl
-
 @[simp] lemma Dyadic.toRat_nonneg (x : Dyadic) : 0 ≤ x.toRat ↔ 0 ≤ x := by
   rw [← Dyadic.toRat_zero, Dyadic.toRat_le_toRat_iff]
 
