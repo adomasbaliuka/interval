@@ -11,7 +11,6 @@ public section
 variable {𝕜 E : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E]
 variable {f : 𝕜 → E}
 
--- Renamed from `iteratedDeriv_mul` (now taken upstream by the Leibniz rule for products).
 lemma iteratedDeriv_id_smul {n : ℕ} (fc : ContDiff 𝕜 n f) {y : 𝕜} :
     iteratedDeriv n (fun x ↦ x • f x) y =
       y • iteratedDeriv n f y + n • iteratedDeriv (n - 1) f y := by
