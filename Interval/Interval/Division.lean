@@ -201,8 +201,7 @@ lemma valid_inv_region {x : Floating}
   approx
 
 /-- One step of Newton's method for the reciprocal.
-    We trust that `1/x ∈ r`, but do not trust the guess `c`.
--/
+    We trust that `1/x ∈ r`, but do not trust the guess `c`. -/
 @[irreducible] def inv_step (x : Floating) (r : Interval) (c : Floating) (x0 : 0 < x.val)
     (xr : approx r x.val⁻¹) : Interval :=
   r.inter (inv_step' x r c) ⟨x.val⁻¹, xr, approx_inv_step' c x0 xr⟩
