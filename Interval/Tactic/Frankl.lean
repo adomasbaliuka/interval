@@ -1,6 +1,7 @@
 module
 
 public import Interval.Tactic.Interval
+meta import Interval.Tactic.Interval
 
 /-!
 # The inequality from Alweiss et al.

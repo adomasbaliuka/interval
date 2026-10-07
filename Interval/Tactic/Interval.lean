@@ -66,7 +66,8 @@ partial def lift (e : Q(ℝ)) : MetaM Q(Interval) := do
     | ~q($x * $y) => return q($(← lift x) * $(← lift y))
     | ~q($x / $y) => return q($(← lift x) / $(← lift y))
     | ~q(@HPow.hPow ℝ ℝ ℝ _ $x $y) => return q($(← lift x) ^ $(← lift y))
-    | ~q(@HPow.hPow ℝ ℕ ℝ _ $x (@OfNat.ofNat ℕ $y _)) => return q($(← lift x) ^ (Interval.ofNat $y))
+    | ~q(@HPow.hPow ℝ ℕ ℝ _ $x (@OfNat.ofNat ℕ $y $i)) =>
+      return q($(← lift x) ^ ((@OfNat.ofNat ℕ $y $i : ℕ) : Interval))
     | ~q(Real.exp $x) => return q($(← lift x).exp)
     | ~q(Real.log $x) => return q($(← lift x).log)
     | ~q(Real.sin $x) => return q($(← lift x).sin)
