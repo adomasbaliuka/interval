@@ -43,8 +43,7 @@ lemma Dyadic.intCast_one : (1 : ℤ) = (1 : Dyadic) := rfl
 @[simp] lemma Dyadic.toRat_one : (1 : Dyadic).toRat = 1 := rfl
 @[simp] lemma Dyadic.toRat_zero' : zero.toRat = 0 := rfl
 
-/-- `x >>> i` in terms of the underlying `Dyadic.shiftRight` (bridges the anonymous
-`HShiftRight` instance, whose auto-generated name isn't stable to reference directly). -/
+/-- `x >>> i` in terms of the underlying `Dyadic.shiftRight`. -/
 lemma Dyadic.shiftRight_def (x : Dyadic) (i : ℤ) : x >>> i = x.shiftRight i := rfl
 
 @[simp] lemma Dyadic.toRat_shiftRightInt : (x >>> s).toRat = x.toRat / 2 ^ s := by
