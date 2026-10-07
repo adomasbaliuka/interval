@@ -22,7 +22,7 @@ instance instApproxComplex : Approx Interval ℂ where
   approx x x' := approx x x'.re ∧ x'.im = 0
 
 @[local simp] lemma approx_complex_iff {x : Interval} {x' : ℂ} :
-    approx x x' ↔ approx x x'.re ∧ x'.im = 0 := by simp [instApproxComplex]
+    approx x x' ↔ approx x x'.re ∧ x'.im = 0 := Iff.rfl
 
 /-- `Interval` are real, so norm is just `sqr` -/
 instance : NormSq Interval where
