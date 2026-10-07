@@ -12,7 +12,15 @@ public import Interval.Interval.Sqrt
 public import Interval.Tactic.Init
 public import Mathlib.Tactic.Monotonicity.Basic
 public import Qq
-meta import Interval.Interval.Order
+public meta import Interval.Interval.Division
+public meta import Interval.Interval.Conversion
+public meta import Interval.Interval.Exp
+public meta import Interval.Interval.Log
+public meta import Interval.Interval.Mul
+public meta import Interval.Interval.Order
+public meta import Interval.Interval.Pow
+public meta import Interval.Interval.Sincos
+public meta import Interval.Interval.Sqrt
 
 /-!
 # The `interval` tactic
