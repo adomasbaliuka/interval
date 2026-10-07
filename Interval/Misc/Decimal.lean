@@ -4,7 +4,6 @@ public import Mathlib.Data.Nat.Log
 public import Mathlib.Data.Rat.Defs
 public import Mathlib.Data.Rat.Floor
 public import Mathlib.Algebra.Order.AbsoluteValue.Basic
-public import Mathlib.Data.Rat.Floor
 public import Mathlib.Data.String.Defs
 public import Mathlib.Tactic.Bound
 public import Interval.Approx.Approx
