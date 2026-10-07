@@ -43,8 +43,6 @@ lemma ByteArray.getElem_eq_getElem! (d : ByteArray) (i : Fin d.size) : d[i] = d[
 lemma ByteArray.getElemNat_eq_getElem! {d : ByteArray} {i : ℕ} (h : i < d.size) : d[i] = d[i]! := by
   exact Eq.symm (getElem!_pos d i h)
 
--- `ByteArray.getElem!_push` is now provided by Lean core (`Init.Data.ByteArray.Lemmas`).
-
 -- This is deprecated upstream, but the exact replacement is unclear
 lemma Array.getElem?_eq_toList_get?' (a : Array α) (i : Nat) : a[i]? = a.toList[i]? := by
   by_cases i < a.size <;> simp_all [getElem?_pos, getElem?_neg]
