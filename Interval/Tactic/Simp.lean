@@ -26,10 +26,6 @@ attribute [to_bitvec] NatCast.natCast UInt64.ofNat UInt64.eq_iff_toBitVec_eq Bit
   UInt64.toInt64_ofNat UInt64.toBitVec_shiftRight UInt64.toBitVec_shiftLeft UInt64.toBitVec_sub
   UInt64.le_iff_toBitVec_le UInt64.add_zero UInt64.toNat_zero UInt64.toBitVec_neg
 
--- `BitVec.reduceOfInt`/`BitVec.reduceNeg` are not in `to_bitvec`: the module system only allows
--- adding a simproc to a simp set if the simproc is `meta`, and these builtin simprocs are not.
--- They are still `@[simp]` upstream, so they fire in ordinary `simp` calls.
-
 attribute [to_omega] BitVec.toInt_ofNat BitVec.msb_eq_toNat BitVec.toInt_ofNat' BitVec.toInt_neg
   BitVec.toNat_eq BitVec.toNat_intMin BitVec.toNat_ofNat BitVec.toInt_neg CharP.cast_eq_zero
   Int.zero_bmod UInt64.toNat_neg UInt64.size UInt64.toNat_ofNat Int64.toInt_ofNat
