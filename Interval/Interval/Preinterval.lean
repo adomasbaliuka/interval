@@ -59,10 +59,6 @@ instance : ApproxNan Preinterval ℝ where
   Interval.mix x.lo x.hi le
 
 /-- If a `Preinterval` is nonempty`, it can be turned into an `Interval` -/
--- The witness `a` is bundled inside the existential (rather than taken as a separate implicit
--- argument) so that it, along with the proof, is fully erased at compile time: an implicit
--- `ℝ`-valued argument used only inside a `Prop` hypothesis is not always erased by the compiler
--- when the caller's instantiation of it is itself noncomputable (e.g. involves `Floating.val`).
 @[irreducible, inline] def mix' (x : Preinterval) (m : ∃ a : ℝ, approx x a) : Interval :=
   x.mix (by
     intro ln hn
