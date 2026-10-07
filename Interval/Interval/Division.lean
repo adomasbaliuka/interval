@@ -202,14 +202,7 @@ lemma valid_inv_region {x : Floating}
 
 /-- One step of Newton's method for the reciprocal.
     We trust that `1/x ∈ r`, but do not trust the guess `c`.
-
-    Unlike an earlier version of this file, `r` and the result are plain `Interval`s rather than
-    `Around x.val⁻¹`: a function that is generic over a real-valued index (such as `Around`'s `c`)
-    becomes noncomputable as soon as it is called with a noncomputable instantiation of that
-    index (e.g. `x.val⁻¹`), even when the index is never actually used at runtime. The fix,
-    following the `Interval.inter`/`Preinterval.mix'` idiom elsewhere in this file, is to keep the
-    computation on plain data and bundle the correctness witness in an erasable `∃`-proof only
-    where one is actually required (here, inside `Interval.inter`). -/
+-/
 @[irreducible] def inv_step (x : Floating) (r : Interval) (c : Floating) (x0 : 0 < x.val)
     (xr : approx r x.val⁻¹) : Interval :=
   r.inter (inv_step' x r c) ⟨x.val⁻¹, xr, approx_inv_step' c x0 xr⟩
