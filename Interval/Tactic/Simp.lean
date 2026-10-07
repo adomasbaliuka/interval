@@ -1,6 +1,8 @@
-import Mathlib.Algebra.CharP.Defs
-import Mathlib.Data.Nat.Size
-import Interval.Tactic.Init
+module
+
+public import Mathlib.Algebra.CharP.Defs
+public import Mathlib.Data.Nat.Size
+public import Interval.Tactic.Init
 
 /-!
 # Initial simp sets
@@ -8,19 +10,25 @@ import Interval.Tactic.Init
 We add various mathlib lemmas to the simp sets defined in `Interval.Tactic.Init`.
 -/
 
+public section
+
 attribute [to_if, to_bitvec, to_omega] Bool.not_not Bool.or_eq_true beq_iff_eq Bool.and_eq_true
   Bool.not_eq_eq_eq_not Bool.not_true bne_iff_ne decide_eq_true_iff ne_eq and_false one_ne_zero
 
 attribute [to_bitvec] NatCast.natCast UInt64.ofNat UInt64.eq_iff_toBitVec_eq BitVec.ofNat_add
   UInt64.ofInt Int64.toUInt64_add UInt64.toBitVec_add Int64.toBitVec_toUInt64 Int64.toBitVec_ofNat
   BitVec.ofNat_eq_ofNat Int64.toBitVec_ofInt IntCast.intCast BitVec.toNat_intCast BitVec.ofInt_neg
-  BitVec.ofInt_add BitVec.reduceOfInt Int64.toBitVec_neg BitVec.ofInt_natCast neg_add_rev
-  BitVec.reduceNeg Nat.cast_add BitVec.natCast_eq_ofNat Nat.cast_one BitVec.ofNat_eq_ofNat
+  BitVec.ofInt_add Int64.toBitVec_neg BitVec.ofInt_natCast neg_add_rev
+  Nat.cast_add BitVec.natCast_eq_ofNat Nat.cast_one BitVec.ofNat_eq_ofNat
   Int64.lt_iff_toBitVec_slt UInt64.toBitVec_toInt64 Int64.le_iff_toBitVec_sle
   BitVec.ofInt_int64ToInt BitVec.ofInt_mul Int64.toUInt64_ofBitVec  UInt64.toBitVec_shiftLeft
   Int64.toBitVec_ofBitVec UInt64.lt_iff_toBitVec_lt UInt64.toBitVec_ofNat Int64.toInt64_toUInt64
   UInt64.toInt64_ofNat UInt64.toBitVec_shiftRight UInt64.toBitVec_shiftLeft UInt64.toBitVec_sub
   UInt64.le_iff_toBitVec_le UInt64.add_zero UInt64.toNat_zero UInt64.toBitVec_neg
+
+-- `BitVec.reduceOfInt`/`BitVec.reduceNeg` are not in `to_bitvec`: the module system only allows
+-- adding a simproc to a simp set if the simproc is `meta`, and these builtin simprocs are not.
+-- They are still `@[simp]` upstream, so they fire in ordinary `simp` calls.
 
 attribute [to_omega] BitVec.toInt_ofNat BitVec.msb_eq_toNat BitVec.toInt_ofNat' BitVec.toInt_neg
   BitVec.toNat_eq BitVec.toNat_intMin BitVec.toNat_ofNat BitVec.toInt_neg CharP.cast_eq_zero

@@ -1,7 +1,8 @@
-import Interval.Floating.TwoPow
-import Interval.Interval.Conversion
-import Interval.Interval.Around
-import Interval.Interval.Mul
+module
+
+public import Interval.Floating.TwoPow
+public import Interval.Interval.Conversion
+public import Interval.Interval.Mul
 
 /-!
 ## `Interval` inverse and division
@@ -29,6 +30,8 @@ Happily, we can cancel `x/c` to get `step f x c = c + x (1 - a c)`.  Let `c = 1/
 If `1/a ∈ x`, the two endpoints of `x` will produce opposite sign for `1 - a x`, which regardless of
 the sign of `d` will produce opposite signs for `d (1 - a x)`, and will bracket `1/a`.
 -/
+
+@[expose] public section
 
 open Pointwise
 open Set
@@ -198,25 +201,43 @@ lemma valid_inv_region {x : Floating}
   approx
 
 /-- One step of Newton's method for the reciprocal.
-    We trust that `1/x ∈ r`, but do not trust the guess `c`. -/
-@[irreducible] def inv_step (x : Floating) (r : Around x.val⁻¹) (c : Floating) (x0 : 0 < x.val) :
-    Around x.val⁻¹ :=
-  r ∩ ⟨inv_step' x r.i c, approx_inv_step' c x0 r.mem⟩
+    We trust that `1/x ∈ r`, but do not trust the guess `c`.
 
-/-- Floating point interval reciprocal using Newton's method.
-    We assume `x⁻¹ ∈ approx r`. -/
-@[irreducible] def _root_.Floating.inv_pos (x : Floating) (x0 : 0 < x.val) :
-    Around x.val⁻¹ :=
+    Unlike an earlier version of this file, `r` and the result are plain `Interval`s rather than
+    `Around x.val⁻¹`: a function that is generic over a real-valued index (such as `Around`'s `c`)
+    becomes noncomputable as soon as it is called with a noncomputable instantiation of that
+    index (e.g. `x.val⁻¹`), even when the index is never actually used at runtime. The fix,
+    following the `Interval.inter`/`Preinterval.mix'` idiom elsewhere in this file, is to keep the
+    computation on plain data and bundle the correctness witness in an erasable `∃`-proof only
+    where one is actually required (here, inside `Interval.inter`). -/
+@[irreducible] def inv_step (x : Floating) (r : Interval) (c : Floating) (x0 : 0 < x.val)
+    (xr : approx r x.val⁻¹) : Interval :=
+  r.inter (inv_step' x r c) ⟨x.val⁻¹, xr, approx_inv_step' c x0 xr⟩
+
+/-- `inv_step` is conservative -/
+@[approx] lemma approx_inv_step {x : Floating} {r : Interval} (c : Floating) (x0 : 0 < x.val)
+    (xr : approx r x.val⁻¹) : approx (inv_step x r c x0 xr) x.val⁻¹ := by
+  rw [inv_step]
+  exact approx_inter xr (approx_inv_step' c x0 xr)
+
+/-- Floating point interval reciprocal using Newton's method. -/
+@[irreducible] def _root_.Floating.inv_pos (x : Floating) (x0 : 0 < x.val) : Interval :=
   -- Three steps of Newton's method to produce a tight, conservative interval.
   -- Probably two is enough, but I'm lazy.
-  let r0 : Around x.val⁻¹ := ⟨inv_region x, approx_inv_region x0⟩
-  let r1 := inv_step x r0 (inv_guess x) x0
-  let r2 := inv_step x r1 r1.i.lo x0
-  inv_step x r2 r2.i.lo x0
+  let r0 := inv_region x
+  let r1 := inv_step x r0 (inv_guess x) x0 (approx_inv_region x0)
+  let r2 := inv_step x r1 r1.lo x0 (approx_inv_step _ x0 (approx_inv_region x0))
+  inv_step x r2 r2.lo x0 (approx_inv_step _ x0 (approx_inv_step _ x0 (approx_inv_region x0)))
+
+/-- `Floating.inv_pos` is conservative -/
+@[approx] lemma _root_.Floating.approx_inv_pos {x : Floating} (x0 : 0 < x.val) :
+    approx (Floating.inv_pos x x0) x.val⁻¹ := by
+  rw [Floating.inv_pos]
+  approx
 
 /-- `Interval` reciprocal of a positive interval -/
 @[irreducible] def inv_pos (x : Interval) (x0 : 0 < x.lo.val) : Interval :=
-  (x.hi.inv_pos (lt_of_lt_of_le x0 x.le)).i ∪ (x.lo.inv_pos x0).i
+  x.hi.inv_pos (lt_of_lt_of_le x0 x.le) ∪ x.lo.inv_pos x0
 
 /-- `Interval` reciprocal using Newton's method. -/
 @[irreducible] def inv (x : Interval) : Interval :=
@@ -242,8 +263,8 @@ lemma inv_def (x : Interval) : x⁻¹ = inv x := rfl
   have x0 := lt_of_lt_of_le l0 ax.1
   have h0 := lt_of_lt_of_le l0 x.le
   apply approx_of_mem_Icc (a := x.hi.val⁻¹) (c := x.lo.val⁻¹)
-  · exact Interval.approx_union_left (Around.mem _)
-  · exact Interval.approx_union_right (Around.mem _)
+  · exact Interval.approx_union_left (Floating.approx_inv_pos h0)
+  · exact Interval.approx_union_right (Floating.approx_inv_pos l0)
   · simp only [mem_Icc, inv_le_inv₀ h0 x0, ax, inv_le_inv₀ x0 l0, and_self]
 
 /-- `Interval.inv` is conservative -/

@@ -1,15 +1,18 @@
-import Interval.Interval.Division
-import Interval.Interval.Conversion
-import Interval.Interval.Exp
-import Interval.Interval.Log
-import Interval.Interval.Mul
-import Interval.Interval.Order
-import Interval.Interval.Pow
-import Interval.Interval.Sincos
-import Interval.Interval.Sqrt
-import Interval.Tactic.Init
-import Mathlib.Tactic.Monotonicity.Basic
-import Qq
+module
+
+public import Interval.Interval.Division
+public import Interval.Interval.Conversion
+public import Interval.Interval.Exp
+public import Interval.Interval.Log
+public import Interval.Interval.Mul
+public import Interval.Interval.Order
+public import Interval.Interval.Pow
+public import Interval.Interval.Sincos
+public import Interval.Interval.Sqrt
+public import Interval.Tactic.Init
+public import Mathlib.Tactic.Monotonicity.Basic
+public import Qq
+meta import Interval.Interval.Order
 
 /-!
 # The `interval` tactic
@@ -20,12 +23,16 @@ expressions from `ℝ` to `Interval`.
 **Warning:** We use `native_decide`, so you must trust the compiler.
 -/
 
+@[expose] public section
+
 open Lean (Expr MetaM MVarId)
 open Lean.Meta
 open Lean.Elab.Tactic
 open Qq
 
 namespace IntervalTactic
+
+meta section
 
 inductive Ineq where
   | lt : Ineq

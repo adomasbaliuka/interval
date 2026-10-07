@@ -1,13 +1,17 @@
-import Interval.Interval.Basic
+module
 
-open Classical
-open Pointwise
+public import Interval.Interval.Basic
 
 /-!
 ## An `Interval` that contains a particular value
 
 This is useful when we need to thread correctness properties through a computation.
 -/
+
+@[expose] public section
+
+open Classical
+open Pointwise
 
 open Set
 open scoped Real
